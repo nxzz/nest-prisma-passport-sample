@@ -27,6 +27,8 @@ export class TokenAuthController {
         @Req() expressReq
     ): Promise<LoginResponse> {
         const payload = expressReq.user as AuthGuardPayload;
+
+        // トークンを新規発行して返す
         return await this.tokenAuthService.updateToken(expressReq.headers['x-refresh-token'], payload);
     }
 

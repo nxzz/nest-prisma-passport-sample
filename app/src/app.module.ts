@@ -26,14 +26,14 @@ import { WebRoutes } from './modules/web/web.route';
         path: '/auth',
         children: AuthRoutes
       },
-      // {
-      //   path: '/admin',
-      //   children: AdminRoutes
-      // },
-      // {
-      //   path: '/web',
-      //   children: WebRoutes
-      // },
+      {
+        path: '/admin',
+        children: AdminRoutes
+      },
+      {
+        path: '/web',
+        children: WebRoutes
+      },
     ]),
   ],
   controllers: [AppController],

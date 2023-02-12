@@ -4,7 +4,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuardPayload } from '../dto/authguard.payload';
 import { Request } from 'express';
-import { AuthService } from '../auth.service';
 import { TokenAuthService } from '../token/token.service';
 
 class _RefreshTokenStrategy extends Strategy {
@@ -19,8 +18,10 @@ class _RefreshTokenStrategy extends Strategy {
   }
 
   authenticate(req: Request): void {
+    // ヘッダーからリフレッシュトークンを取る
     const apiKey: string = req.headers['x-refresh-token'] as string;
     if (!apiKey) {
+      // 無ければエラー
       throw new UnauthorizedException();
     }
 
@@ -48,7 +49,9 @@ export class RefreshTokenStrategy extends PassportStrategy(_RefreshTokenStrategy
   }
 
   async validate(payload: string): Promise<AuthGuardPayload> {
+    // リフレッシュトークンを検索
     const userRefreshToken = await this.tokenAuthService.validateRefreshToken(payload);
+    // 無ければエラー
     if (!userRefreshToken) throw new UnauthorizedException();
     return {
       userId: userRefreshToken.userId,

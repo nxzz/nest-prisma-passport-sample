@@ -15,18 +15,6 @@ export class TokenAuthService {
         private userRefreshTokenRepository: UserRefreshTokenRepository,
     ) { }
 
-    // async validateAccessToken(accessToken: string): Promise<UserAuthMethod | null> {
-    //     const tokens = await this.userRefreshTokenRepository.findFirst({
-    //         where: {
-    //             accessToken: accessToken
-    //         }
-    //     });
-    //     if (tokens && DateTime.now().toUnixInteger() < DateTime.fromJSDate(tokens.expiresAt).toUnixInteger()) {
-    //         return tokens.userAuthMethod
-    //     }
-    //     return null;
-    // }
-
     async validateRefreshToken(refreshToken: string): Promise<UserRefreshToken & { user: User; } | null> {
         const tokens = await this.userRefreshTokenRepository.findUnique({
             where: {

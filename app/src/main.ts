@@ -17,7 +17,7 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
     logger: ["error", "warn", "log", "debug"],
-    bodyParser: false,
+    bodyParser: true,
   });
   app.useGlobalPipes(new ValidationPipe({
     forbidNonWhitelisted: true,
@@ -26,8 +26,7 @@ async function bootstrap() {
   }));
   app.setGlobalPrefix('api');
 
-  // TODO: AngularでCORS例外が起きたため、記述
-  // 他にもっといい解決策があるかも
+  // TODO: CORS例外対策、本番ではちゃんと設定すること
   app.enableCors({
     origin: '*',
     allowedHeaders: '*',

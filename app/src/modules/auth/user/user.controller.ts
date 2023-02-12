@@ -19,7 +19,7 @@ export class UserAuthController {
     ) { }
 
     @Post('signup')
-    @ApiOperation({ summary: '初期会員登録' })
+    @ApiOperation({ summary: '会員登録' })
     @ApiResponse({
         status: 200,
         description: '正常終了',
@@ -28,7 +28,7 @@ export class UserAuthController {
     async signup(
         @Body() req: LocalSignupRequest,
     ): Promise<LoginResponse> {
-        // ゲスト会員登録処理
+        // 会員登録処理
         const user = await this.userAuthService.signup(req.name, req.email, req.password);
         const res = await this.tokenAuthService.getNewToken({
             userId: user.id,
@@ -46,8 +46,9 @@ export class UserAuthController {
         description: '正常終了'
     })
     async destroy(
-        @Req() request: Request & { useragent: Details, socket: { remoteAddress: string, remotePort: string }, user: AuthGuardPayload }
+        @Req() request: Request & { user: AuthGuardPayload }
     ): Promise<void> {
+        // 退会処理
         await this.userAuthService.destroy(request.user.userId);
     }
 

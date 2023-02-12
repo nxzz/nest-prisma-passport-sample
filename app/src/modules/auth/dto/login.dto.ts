@@ -25,10 +25,3 @@ export class ToeknCheckResponse {
     @IsBoolean()
     readonly valid: boolean;
 }
-
-export class PassportAuthData {
-    readonly authKey: string;
-    readonly authSecret: string;
-    readonly email: string;
-    readonly name: string;
-}
