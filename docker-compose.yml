@@ -1,0 +1,38 @@
+version: "3"
+services:
+  mysql:
+    image: mariadb:10.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    volumes:
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/data:/var/lib/mysql
+    ports:
+      - 3306:3306
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+      - UPLOAD_LIMIT=20000000
+    links:
+      - mysql
+    ports:
+      - 8081:80
+  # api:
+  #   links:
+  #     - "mysql"
+  #   environment:
+  #     - NODE_ENV=development
+  #   volumes:
+  #     - ./app:/app
+  #   build:
+  #     context: ./src
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - 8080:80

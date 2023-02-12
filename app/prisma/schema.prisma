@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+// 管理者種別
+enum Permission {
+  ENDUSER
+  ADMIN
+}
+
+// ユーザ基本部分 削除禁止 論理削除のみ
+model User {
+  id Int @id @default(autoincrement())
+
+  // 認証系
+  UserRefreshToken UserRefreshToken[]
+  permission       Permission
+
+  // ユーザ情報
+  name     String
+  email    String @unique
+  password String
+
+  // 時間系
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// リフレッシュトークン 削除OK
+model UserRefreshToken {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  refreshToken String   @unique
+  accessToken  String   @db.LongText
+  expiresAt    DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ----マスタ----
+
+// 都道府県マスタ 削除禁止
+model MasterPrefecture {
+  id   Int    @id
+  name String
+}
